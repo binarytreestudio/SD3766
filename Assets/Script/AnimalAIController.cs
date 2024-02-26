@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,10 @@ public class AnimalAIController : MonoBehaviour
 {
     [SerializeField] Animator anim;
     [SerializeField] AIState state = AIState.None;
-    [Range(0, 360f)] [SerializeField] float rotateAngle = 30;
-    [Range(0, 2f)] [SerializeField] float walkSpeed = 0.5f;
-    /*[Range(0, 2f)] [SerializeField]*/ float runSpeed = 1f;
+    [Range(0, 360f)][SerializeField] float rotateAngle = 30;
+    [Range(0, 2f)][SerializeField] float walkSpeed = 0.5f;
+    /*[Range(0, 2f)] [SerializeField]*/
+    float runSpeed = 1f;
     private Vector3 rotatingVcetor = default;
 
     void Start()
@@ -19,7 +21,7 @@ public class AnimalAIController : MonoBehaviour
 
     void RandomStateChange()
     {
-        ChangeState((AIState)Random.Range(1, 3));
+        ChangeState((AIState)UnityEngine.Random.Range(1, 3));
     }
 
 
@@ -55,6 +57,10 @@ public class AnimalAIController : MonoBehaviour
                 break;
         }
     }
+    public void ChangeState(string stateName)
+    {
+        ChangeState(Enum.Parse<AIState>(stateName));
+    }
 
     public void ChangeState(AIState state)
     {
@@ -66,7 +72,7 @@ public class AnimalAIController : MonoBehaviour
                 break;
             case AIState.Rotating:
                 anim.SetFloat("Speed_f", 0.5f);
-                rotatingVcetor = (Random.value > 0.5f ? Vector3.up : Vector3.down) * rotateAngle;
+                rotatingVcetor = (UnityEngine.Random.value > 0.5f ? Vector3.up : Vector3.down) * rotateAngle;
                 break;
             case AIState.WalkingAround:
                 anim.SetFloat("Speed_f", 0.5f);
@@ -75,6 +81,7 @@ public class AnimalAIController : MonoBehaviour
                 anim.SetFloat("Speed_f", 1f);
                 break;
             case AIState.Eating:
+                anim.SetFloat("Speed_f", 0);
                 break;
         }
     }
